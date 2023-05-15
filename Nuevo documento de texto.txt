@@ -1,0 +1,2 @@
+AplicationClientId: ed7a896e-b5ba-4cfe-98cc-4e6107e399f4
+Secret: aFV8Q~QVewGG~aLt_Z9wpXTyhDZDiH_X0O4PGa.z

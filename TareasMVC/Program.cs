@@ -18,7 +18,11 @@ builder.Services.AddControllersWithViews(opciones =>
 builder.Services.AddDbContext<ApliationDBContext>(options =>
 options.UseSqlServer("name=DefaultConnection"));
 
-builder.Services.AddAuthentication();
+builder.Services.AddAuthentication().AddMicrosoftAccount(opciones =>
+{
+    opciones.ClientId = builder.Configuration["MicrosoftClintId"];
+    opciones.ClientSecret = builder.Configuration["MicrosoftSecretId"];
+});
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(opciones =>
 {
@@ -27,12 +31,13 @@ opciones.SignIn.RequireConfirmedAccount = false;
 
 builder.Services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, opciones =>
 {
-    opciones.LogoutPath = "/Usuarios/login";
-    opciones.AccessDeniedPath = "/Usuarios/login";
+    opciones.LogoutPath = "/Account/Login";
+    opciones.AccessDeniedPath = "/Account/Login";
 });
 
 var app = builder.Build();
 
+// Configure the HTTP request pipeline.
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
