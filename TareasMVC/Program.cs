@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using TareasMVC;
 using Microsoft.AspNetCore.Mvc.Razor;
+using TareasMVC.Servicios;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,11 +52,11 @@ builder.Services.AddLocalization(opciones =>
 
 var app = builder.Build();
 //cargar los idiomas y poder configurarlos
-var CulturasUISoportadas = new[] { "es", "en" };
+//var CulturasUISoportadas = new[] { "es", "en" };
 app.UseRequestLocalization(opciones =>
 {
     opciones.DefaultRequestCulture = new RequestCulture("es");//cultura por defecto
-    opciones.SupportedUICultures = CulturasUISoportadas.Select(cultura => new CultureInfo(cultura)).ToList();// culturas soportadas
+    opciones.SupportedUICultures = Constantes.CulturasUISoportadas.Select(cultura => new CultureInfo(cultura.Value)).ToList();// culturas soportadas
 });
 // Configure the HTTP request pipeline.
 // Configure the HTTP request pipeline.

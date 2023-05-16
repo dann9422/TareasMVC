@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Mvc.Localization
+﻿@*@using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer localizer;
 
 @{
@@ -14,3 +14,12 @@
     <h3>@ViewBag.saludo, Daniel</h3>
 
 </div>
+
+<button onclick="MostrarError()" >
+    Mostrar error
+</button>
+
+@section Scripts{
+    <script src="~/js/Utilidades.js"></script>
+}
+*@
