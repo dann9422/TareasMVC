@@ -132,3 +132,79 @@ async function manejarClickTarea(tarea) {
 
 }
 
+async function manejarCambioEditarTarea() {
+    const obj = {
+        id: tareaEditarVM.id,
+        titulo: tareaEditarVM.titulo(),
+        descripcion: tareaEditarVM.descripcion()
+    };
+
+    if (!obj.titulo) {
+        return;
+    }
+
+    await editarTareaCompleta(obj);
+
+    const indice = tareaListadoViewModel.tareas().findIndex(t => t.id() === obj.id);
+    const tarea = tareaListadoViewModel.tareas()[indice];
+    tarea.titulo(obj.titulo);
+}
+
+async function editarTareaCompleta(tarea) {
+    const data = JSON.stringify(tarea);
+
+    const respuesta = await fetch(`${urlTareas}/${tarea.id}`, {
+        method: 'PUT',
+        body: data,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    if (!respuesta.ok) {
+        manejarErrorApi(respuesta);
+        throw "error";
+    }
+}
+
+function intentarBorrarTarea(tarea) {
+    modalEditarTareaBootstrap.hide();
+
+    confirmarAccion({
+        callBackAceptar: () => {
+            borrarTarea(tarea);
+        },
+        callbackCancelar: () => {
+            modalEditarTareaBootstrap.show();
+        },
+        titulo: `¿Desea borrar la tarea ${tarea.titulo()}?`
+    })
+
+}
+
+async function borrarTarea(tarea) {
+    const idTarea = tarea.id;
+
+    const respuesta = await fetch(`${urlTareas}/${idTarea}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    if (respuesta.ok) {
+        const indice = obtenerIndiceTareaEnEdicion();
+        tareaListadoViewModel.tareas.splice(indice, 1);
+    }
+}
+function obtenerIndiceTareaEnEdicion() {
+    return tareaListadoViewModel.tareas().findIndex(t => t.id() == tareaEditarVM.id);
+}
+
+//$(function () {
+//    $("#reordenable").sortable({
+//        axis: 'y',
+//        stop: async function () {
+//            await actualizarOrdenTareas();
+//        }
+//    })
+//})
