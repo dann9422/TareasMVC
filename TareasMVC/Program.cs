@@ -50,6 +50,9 @@ builder.Services.AddLocalization(opciones =>
     opciones.ResourcesPath = "Recursos";
 });
 
+builder.Services.AddTransient<IservicioUsuarios, ServicioUsuarios>();
+builder.Services.AddAutoMapper(typeof(Program));
+
 var app = builder.Build();
 //cargar los idiomas y poder configurarlos
 //var CulturasUISoportadas = new[] { "es", "en" };
