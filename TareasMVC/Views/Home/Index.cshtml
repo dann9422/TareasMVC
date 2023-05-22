@@ -4,7 +4,6 @@
 @{
     ViewData["Title"] = "Listado tareas";
 }
-
 <div class="text-center">
     <h1 class="display-4">@localizer["Mis tareas"]</h1>
     <button type="button" class="btn btn-primary mb-3" onclick="agregarNuevaTareaAlListado()">
@@ -17,6 +16,15 @@
         <div name="tarea" class="border mb-2 p-2" style="cursor: pointer"
              data-bind="click: manejarClickTarea">
             <div data-bind="text: titulo, hidden: esNuevo" class="fw-bold">
+            </div>
+
+            <div name="pasos-resumen" data-bind="visible: pasosTotal() > 0">
+                <span data-bind="text: pasosRealizados">
+                </span>/<span data-bind="text: pasosTotal">
+                </span>
+                <span data-bind="text: porcentajeCompletado">
+
+                </span>
             </div>
 
             <input type="text" name="titulo-tarea" autocomplete="off"
@@ -40,9 +48,11 @@
 <partial name="_ModalEditarTarea" />
 
 @section Scripts{
-    <script src="~/js/Utilidades.js" asp-append-version="true"></script>
-    <script src="~/js/Tareas.js" asp-append-version="true"></script>
+
+    <script src="~/js/utilidades.js" asp-append-version="true"></script>
+    <script src="~/js/tareas.js" asp-append-version="true"></script>
     <script src="~/js/pasos.js" asp-append-version="true"></script>
+    <script src="~/js/archivos-adjuntos.js" asp-append-version="true"></script>
 
     <script>
 
@@ -57,7 +67,7 @@
             self.tareas = ko.observableArray([]);
             self.cargando = ko.observable(true);
 
-            self.noHayTareas = ko.pureComputed(function() {
+            self.noHayTareas = ko.pureComputed(function () {
                 if (self.cargando()) {
                     return false;
                 }
@@ -66,27 +76,36 @@
             })
         }
 
-        function tareaElementoListadoViewModel({ id, titulo }) {
+        function tareaElementoListadoViewModel({ id, titulo, pasosTotal, pasosRealizados }) {
             var self = this;
             self.id = ko.observable(id);
             self.titulo = ko.observable(titulo);
-            self.esNuevo = ko.pureComputed(function() {
+
+            self.pasosTotal = ko.observable(pasosTotal);
+            self.pasosRealizados = ko.observable(pasosRealizados);
+
+            self.esNuevo = ko.pureComputed(function () {
                 return self.id() == 0;
             })
-        }
 
+            self.porcentajeCompletado = ko.pureComputed(function(){
+                const calculo = Math.round(self.pasosRealizados() * 1.0 / self.pasosTotal() * 100);
+
+                return `(${calculo}%)`;
+            });
+        }
 
         const tareaEditarVM = {
             id: 0,
             titulo: ko.observable(''),
             descripcion: ko.observable(''),
-            pasos: ko.observableArray([])
+            pasos: ko.observableArray([]),
+            archivosAdjuntos: ok.observableArray([])
         }
-
 
         const tareaListadoViewModel = new tareaListadoViewModelFn();
 
-        function pasoViewModel({ id, descripcion, realizado, modoEdicion }) {
+        function pasoViewModel({id, descripcion, realizado, modoEdicion}){
             var self = this;
             self.id = ko.observable(id || 0);
             self.descripcion = ko.observable(descripcion || '');
@@ -94,15 +113,13 @@
             self.realizado = ko.observable(realizado);
             self.modoEdicion = ko.observable(modoEdicion);
 
-            self.esNuevo = ko.pureComputed(function() {
+            self.esNuevo = ko.pureComputed(function (){
                 return self.id() == 0;
             })
         }
-        //setTimeout(() => {
-        //    // se va a ejecutar despues de 2 segundos
-        //    tareaListadoViewModel.cargando(false);
-        //},100)
+
         obtenerTareas();
+
         ko.applyBindings(tareaListadoViewModel, document.getElementById('contenedor-listado-tareas'));
         ko.applyBindings(tareaEditarVM, document.getElementById('modal-editar-tarea'));
     </script>

@@ -9,7 +9,7 @@
             <div class="col-1">
                 <input type="checkbox" class="form-check-input" name="chbPaso"
                        data-bind="checked: realizado, 
-                                   @*click: manejarClickCheckboxPaso,*@
+                                   click: manejarClickCheckboxPaso,
                                    attr:{'data-id': id}" />
             </div>
             <div class="col-11">
@@ -24,15 +24,15 @@
 
                 <div class="mt-2" data-bind="{visible: modoEdicion}">
                     <button class="btn btn-primary" data-bind="{click: manejarClickSalvarPaso}">
-                        Guardar
+                        Salvar
                     </button>
                     <button class="btn btn-secondary" data-bind="{click: manejarClickCancelarPaso}">
                         Cancelar
                     </button>
-@*                    <button class="btn btn-danger" data-bind="{hidden: esNuevo, 
+                    <button class="btn btn-danger" data-bind="{hidden: esNuevo, 
                             click: manejarClickBorrarPaso}">
                         Borrar
-                    </button>*@
+                    </button>
                 </div>
             </div>
         </div>
