@@ -226,9 +226,6 @@ namespace TareasMVC.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ArchivoAdjuntoId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2");
 
@@ -247,11 +244,9 @@ namespace TareasMVC.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ArchivoAdjuntoId");
-
                     b.HasIndex("TareaId");
 
-                    b.ToTable("ArchivoAdjuntos");
+                    b.ToTable("ArchivosAdjuntos");
                 });
 
             modelBuilder.Entity("TareasMVC.Entidades.Paso", b =>
@@ -290,7 +285,7 @@ namespace TareasMVC.Migrations
                     b.Property<string>("Descripcion")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("FGechaCreacion")
+                    b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Orden")
@@ -364,12 +359,8 @@ namespace TareasMVC.Migrations
 
             modelBuilder.Entity("TareasMVC.Entidades.ArchivoAdjunto", b =>
                 {
-                    b.HasOne("TareasMVC.Entidades.ArchivoAdjunto", null)
-                        .WithMany("ArchivoAdjuntos")
-                        .HasForeignKey("ArchivoAdjuntoId");
-
                     b.HasOne("TareasMVC.Entidades.Tarea", "Tarea")
-                        .WithMany("archivoAdjuntos")
+                        .WithMany("ArchivosAdjuntos")
                         .HasForeignKey("TareaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -397,16 +388,11 @@ namespace TareasMVC.Migrations
                     b.Navigation("UsuarioCreacion");
                 });
 
-            modelBuilder.Entity("TareasMVC.Entidades.ArchivoAdjunto", b =>
-                {
-                    b.Navigation("ArchivoAdjuntos");
-                });
-
             modelBuilder.Entity("TareasMVC.Entidades.Tarea", b =>
                 {
-                    b.Navigation("Pasos");
+                    b.Navigation("ArchivosAdjuntos");
 
-                    b.Navigation("archivoAdjuntos");
+                    b.Navigation("Pasos");
                 });
 #pragma warning restore 612, 618
         }

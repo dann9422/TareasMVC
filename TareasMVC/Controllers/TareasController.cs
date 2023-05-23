@@ -30,6 +30,7 @@ namespace TareasMVC.Controllers
 
             var tarea = await context.Tareas
                 .Include(t=>t.Pasos)
+                .Include(t=> t.ArchivosAdjuntos.OrderBy(o=> o.Orden))
                 .FirstOrDefaultAsync(t => t.Id == id &&
             t.UsuarioCreacionId == usuarioId);
 
@@ -78,7 +79,7 @@ namespace TareasMVC.Controllers
             {
                 Titulo = titulo,
                 UsuarioCreacionId = usuarioId,
-                FGechaCreacion = DateTime.Now,
+                FechaCreacion = DateTime.Now,
                 Orden = OrdenMayor + 1
             };
 

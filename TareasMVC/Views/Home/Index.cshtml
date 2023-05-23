@@ -58,6 +58,7 @@
 
         const urlTareas = "/api/tareas";
         const urlPasos = "/api/pasos";
+        const urlArchivos = '/api/archivos';
 
         const modalEditarTarea = document.getElementById('modal-editar-tarea');
         const modalEditarTareaBootstrap = new bootstrap.Modal(modalEditarTarea);
@@ -67,7 +68,7 @@
             self.tareas = ko.observableArray([]);
             self.cargando = ko.observable(true);
 
-            self.noHayTareas = ko.pureComputed(function () {
+            self.noHayTareas = ko.pureComputed(function() {
                 if (self.cargando()) {
                     return false;
                 }
@@ -84,11 +85,11 @@
             self.pasosTotal = ko.observable(pasosTotal);
             self.pasosRealizados = ko.observable(pasosRealizados);
 
-            self.esNuevo = ko.pureComputed(function () {
+            self.esNuevo = ko.pureComputed(function() {
                 return self.id() == 0;
             })
 
-            self.porcentajeCompletado = ko.pureComputed(function(){
+            self.porcentajeCompletado = ko.pureComputed(function() {
                 const calculo = Math.round(self.pasosRealizados() * 1.0 / self.pasosTotal() * 100);
 
                 return `(${calculo}%)`;
@@ -100,12 +101,12 @@
             titulo: ko.observable(''),
             descripcion: ko.observable(''),
             pasos: ko.observableArray([]),
-            archivosAdjuntos: ok.observableArray([])
+            archivosAdjuntos: ko.observableArray([])
         }
 
         const tareaListadoViewModel = new tareaListadoViewModelFn();
 
-        function pasoViewModel({id, descripcion, realizado, modoEdicion}){
+        function pasoViewModel({ id, descripcion, realizado, modoEdicion }) {
             var self = this;
             self.id = ko.observable(id || 0);
             self.descripcion = ko.observable(descripcion || '');
@@ -113,10 +114,21 @@
             self.realizado = ko.observable(realizado);
             self.modoEdicion = ko.observable(modoEdicion);
 
-            self.esNuevo = ko.pureComputed(function (){
+            self.esNuevo = ko.pureComputed(function() {
                 return self.id() == 0;
             })
         }
+
+        function archivoAdjuntoViewModel({id, titulo, publicado, modoEdicion, orden, url}){
+            var self = this;
+            self.id = id;
+            self.titulo = ko.observable(titulo || '');
+            self.publicado = publicado;
+            self.modoEdicion = ko.observable(modoEdicion);
+            self.orden = orden;
+            self.url = url;
+        }
+
 
         obtenerTareas();
 

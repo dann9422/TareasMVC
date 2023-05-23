@@ -56,6 +56,7 @@ builder.Services.AddLocalization(opciones =>
 
 builder.Services.AddTransient<IservicioUsuarios, ServicioUsuarios>();
 builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddTransient<IAlmacenadorArchivos ,AlmacenadorArchivosAzure > ();
 
 var app = builder.Build();
 //cargar los idiomas y poder configurarlos
